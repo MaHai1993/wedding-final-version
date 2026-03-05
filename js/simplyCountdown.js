@@ -131,6 +131,7 @@
                 plural: true,
                 inline: false,
                 enableUtc: true,
+                countUp: false,
                 onEnd: function () {
                     return;
                 },
@@ -143,7 +144,6 @@
             }, args),
             interval,
             targetDate,
-            targetTmpDate,
             now,
             nowUtc,
             secondsLeft,
@@ -153,19 +153,24 @@
             seconds,
             cd = document.querySelectorAll(elt);
 
-        targetTmpDate = new Date("12/14/2019 18:00:00");
-
         if (parameters.enableUtc) {
-            targetDate = new Date(
-                targetTmpDate.getUTCFullYear(),
-                targetTmpDate.getUTCMonth(),
-                targetTmpDate.getUTCDate(),
-                targetTmpDate.getUTCHours(),
-                targetTmpDate.getUTCMinutes(),
-                targetTmpDate.getUTCSeconds()
-            );
+            targetDate = new Date(Date.UTC(
+                parameters.year,
+                parameters.month - 1,
+                parameters.day,
+                parameters.hours,
+                parameters.minutes,
+                parameters.seconds
+            ));
         } else {
-            targetDate = targetTmpDate;
+            targetDate = new Date(
+                parameters.year,
+                parameters.month - 1,
+                parameters.day,
+                parameters.hours,
+                parameters.minutes,
+                parameters.seconds
+            );
         }
 
         Array.prototype.forEach.call(cd, function (countdown) {
@@ -182,13 +187,17 @@
                 if (parameters.enableUtc) {
                     nowUtc = new Date(now.getFullYear(), now.getMonth(), now.getDate(),
                         now.getHours(), now.getMinutes(), now.getSeconds());
-                    secondsLeft = (targetDate - nowUtc.getTime()) / 1000;
+                    secondsLeft = (targetDate.getTime() - nowUtc.getTime()) / 1000;
 
                 } else {
-                    secondsLeft = (targetDate - now.getTime()) / 1000;
+                    secondsLeft = (targetDate.getTime() - now.getTime()) / 1000;
                 }
 
-                if (secondsLeft > 0) {
+                if (secondsLeft > 0 || !parameters.countUp) {
+                    // Normal countdown mode (or reached past date but countUp disabled)
+                    if (secondsLeft < 0) {
+                        secondsLeft = 0;
+                    }
                     days = parseInt(secondsLeft / 86400, 10);
                     secondsLeft = secondsLeft % 86400;
 
@@ -197,13 +206,22 @@
 
                     minutes = parseInt(secondsLeft / 60, 10);
                     seconds = parseInt(secondsLeft % 60, 10);
+
+                    if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+                        window.clearInterval(interval);
+                        parameters.onEnd();
+                    }
                 } else {
-                    days = 0;
-                    hours = 0;
-                    minutes = 0;
-                    seconds = 0;
-                    window.clearInterval(interval);
-                    parameters.onEnd();
+                    // Count up mode once the date has passed
+                    var secondsPassed = -secondsLeft;
+                    days = parseInt(secondsPassed / 86400, 10);
+                    secondsPassed = secondsPassed % 86400;
+
+                    hours = parseInt(secondsPassed / 3600, 10);
+                    secondsPassed = secondsPassed % 3600;
+
+                    minutes = parseInt(secondsPassed / 60, 10);
+                    seconds = parseInt(secondsPassed % 60, 10);
                 }
 
                 if (parameters.plural) {
