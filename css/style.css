@@ -2154,6 +2154,10 @@ div p {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Large items - span more grid cells */
@@ -2198,34 +2202,49 @@ div p {
   bottom: 0;
   background: linear-gradient(135deg, rgba(187, 144, 88, 0.85) 0%, rgba(0, 0, 0, 0.9) 100%);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
   padding: 30px;
   opacity: 0;
   transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 10;
+  overflow: hidden;
 }
 
 /* Content inside overlay */
 .travel-content {
   color: white;
   width: 100%;
-  transform: translateY(20px);
+  text-align: center;
+  transform: translateY(30px) scale(0.8);
   transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: 100%;
+  overflow: visible;
 }
 
 .travel-content h3 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
-  margin: 0 0 5px 0;
+  margin: 0 0 10px 0;
   font-family: 'headerName', cursive;
   letter-spacing: 1px;
+  line-height: 1.2;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .travel-content p {
-  font-size: 14px;
+  font-size: 15px;
   margin: 0;
-  opacity: 0.9;
+  opacity: 1;
   font-style: italic;
+  line-height: 1.4;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 /* HOVER EFFECTS - WOW! */
@@ -2245,7 +2264,7 @@ div p {
 }
 
 .travel-gallery-item:hover .travel-content {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 /* Responsive Design */
@@ -2280,6 +2299,21 @@ div p {
 
   .travel-content h3 {
     font-size: 18px;
+    margin: 0 0 5px 0;
+  }
+
+  .travel-overlay {
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(187, 144, 88, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
+  }
+
+  .travel-content {
+    transform: translateY(0) scale(1);
+  }
+
+  .travel-content p {
+    font-size: 12px;
+    margin: 0;
   }
 }
 
@@ -2299,10 +2333,20 @@ div p {
 
   .travel-content h3 {
     font-size: 16px;
+    margin: 0 0 4px 0;
   }
 
   .travel-content p {
-    font-size: 12px;
+    font-size: 11px;
+  }
+
+  .travel-overlay {
+    padding: 12px;
+    background: linear-gradient(135deg, rgba(187, 144, 88, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%);
+  }
+
+  .travel-content {
+    transform: translateY(0) scale(1);
   }
 }
 

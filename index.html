@@ -497,8 +497,8 @@
                                 <img src="./images/hinh-di-choi/chau-au/IMG_4088.jpeg" alt="Travel">
                                 <div class="travel-overlay">
                                     <div class="travel-content">
-                                        <h3>Paris</h3>
-                                        <p>Thành phố tình yêu</p>
+                                        <h3>Love</h3>
+                                        <p>Đi đâu cũng được miễn có nhau</p>
                                     </div>
                                 </div>
                             </div>
@@ -822,40 +822,61 @@
                     .appendTo('#slideshow');
             },  2000);
 
-            /* Travel Gallery Lightbox Effect */
+            /* Travel Gallery Lightbox Effect - Fixed for Mobile/iPhone */
             $('.travel-gallery-item').each(function(){
                 var image = $(this).find('img').attr('src');
-                $(this).find('a').attr('href', image);
-            });
-
-            // Add click handler to open image
-            $('.travel-gallery-item').on('click', function(e){
-                e.preventDefault();
-                var image = $(this).find('img').attr('src');
                 var title = $(this).find('h3').text();
-
-                $.magnificPopup.open({
-                    items: {
-                        src: image,
-                        title: title
-                    },
-                    type: 'image',
-                    mainClass: 'mfp-fade',
-                    removalDelay: 300,
-                    preloader: true,
-                    fixedContentPos: true,
-                    zoom: {
-                        enabled: true,
-                        duration: 300
-                    },
-                    image: {
-                        verticalFit: true,
-                        titleSrc: function(item) {
-                            return item.el.find('h3').text() + ' | Travel Memories';
-                        }
-                    }
-                }, 0);
+                var desc = $(this).find('p').text();
+                $(this).css('cursor', 'pointer');
+                $(this).attr('data-image', image);
+                $(this).attr('data-title', title);
+                $(this).attr('data-desc', desc);
             });
+
+            // Handle both mouse and touch events
+            var travelGalleryHandler = function(e) {
+                // Prevent default and stop propagation
+                if(e.type !== 'click' && e.type !== 'touchend') return;
+
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+
+                var $item = $(this);
+                var image = $item.attr('data-image');
+                var title = $item.attr('data-title');
+                var desc = $item.attr('data-desc');
+
+                if(image) {
+                    $.magnificPopup.open({
+                        items: {
+                            src: image
+                        },
+                        type: 'image',
+                        mainClass: 'mfp-fade',
+                        removalDelay: 300,
+                        preloader: true,
+                        fixedContentPos: false,
+                        mobile: {
+                            preloader: true
+                        },
+                        zoom: {
+                            enabled: true,
+                            duration: 300
+                        },
+                        image: {
+                            verticalFit: true,
+                            titleSrc: function() {
+                                return '<span style="color: #BB9058; font-weight: bold;">' + title + '</span><br><span style="color: #999; font-size: 13px;">' + desc + '</span>';
+                            }
+                        }
+                    });
+                }
+            };
+
+            // Bind both click and touchend events
+            $('.travel-gallery-item').on('click touchend', travelGalleryHandler);
+
 
         </script>
 
