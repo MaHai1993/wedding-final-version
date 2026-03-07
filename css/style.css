@@ -1092,7 +1092,7 @@ form label {
   border-radius: 50%;
 }
 /** Banner **/
-@media only screen and (max-width: 414px) {
+@media only screen and (max-width: 499px) {
   .banner-repository {
     background-image: url("../images/banner/322A3013-mobile.jpg");
   }
@@ -1114,7 +1114,7 @@ form label {
 }
 
 /** Background repository **/
-@media only screen and (max-width: 414px) {
+@media only screen and (max-width: 499px) {
   #fh5co-event {
     background-image: url("../images/background/322A1504.jpg");
   }
@@ -1984,7 +1984,7 @@ form label {
   }
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (max-width: 499px) {
   #slideshow {
     text-align: center;
     /*margin: 50px auto;*/
